@@ -1,0 +1,116 @@
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+public class Tool
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Category { get; set; }
+    public string Description { get; set; }
+    public decimal Power { get; set; }
+    public decimal Price { get; set; }
+    public int StockQuantity { get; set; }
+    public string Status { get; set; }
+
+    private string connectionString = "127.0.0.1"; // Altere para sua string de conexão
+
+    // adicionar uma ferramenta
+    public void AddTool()
+    {
+        using (var conn = new MySqlConnection(connectionString))
+        {
+            conn.Open();
+            var query = "INSERT INTO tools (name, category, description, power, price, stock_quantity, status) VALUES (@name, @category, @description, @power, @price, @stock_quantity, @status)";
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@name", Name);
+            cmd.Parameters.AddWithValue("@category", Category);
+            cmd.Parameters.AddWithValue("@description", Description);
+            cmd.Parameters.AddWithValue("@power", Power);
+            cmd.Parameters.AddWithValue("@price", Price);
+            cmd.Parameters.AddWithValue("@stock_quantity", StockQuantity);
+            cmd.Parameters.AddWithValue("@status", Status);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    // Método para atualizar uma ferramenta
+    public void UpdateTool()
+    {
+        using (var conn = new MySqlConnection(connectionString))
+        {
+            conn.Open();
+            var query = "UPDATE tools SET name = @name, category = @category, description = @description, power = @power, price = @price, stock_quantity = @stock_quantity, status = @status WHERE id = @id";
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", Id);
+            cmd.Parameters.AddWithValue("@name", Name);
+            cmd.Parameters.AddWithValue("@category", Category);
+            cmd.Parameters.AddWithValue("@description", Description);
+            cmd.Parameters.AddWithValue("@power", Power);
+            cmd.Parameters.AddWithValue("@price", Price);
+            cmd.Parameters.AddWithValue("@stock_quantity", StockQuantity);
+            cmd.Parameters.AddWithValue("@status", Status);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    // excluir uma ferramenta
+    public void DeleteTool()
+    {
+        using (var conn = new MySqlConnection(connectionString))
+        {
+            conn.Open();
+            var query = "DELETE FROM tools WHERE id = @id";
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", Id);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    // Obter todas as ferramentas
+    public static List<Tool> GetTools()
+    {
+        var tools = new List<Tool>();
+        using (var conn = new MySqlConnection("your_connection_string_here"))
+        {
+            conn.Open();
+            var query = "SELECT * FROM tools";
+            var cmd = new MySqlCommand(query, conn);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                tools.Add(new Tool
+                {
+                    Id = reader.GetInt32("id"),
+                    Name = reader.GetString("name"),
+                    Category = reader.GetString("category"),
+                    Description = reader.GetString("description"),
+                    Power = reader.GetDecimal("power"),
+                    Price = reader.GetDecimal("price"),
+                    StockQuantity = reader.GetInt32("stock_quantity"),
+                    Status = reader.GetString("status")
+                });
+            }
+        }
+        return tools;
+    }
+
+    // atualizar o estoque
+    public void UpdateStock(int quantity)
+    {
+        StockQuantity += quantity;
+        using (var conn = new MySqlConnection(connectionString))
+        {
+            conn.Open();
+            var query = "UPDATE tools SET stock_quantity = @stock_quantity WHERE id = @id";
+            var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@stock_quantity", StockQuantity);
+            cmd.Parameters.AddWithValue("@id", Id);
+            cmd.ExecuteNonQuery();
+        }
+    }
+}
