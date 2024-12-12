@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-public partial class Form2 : Form
+public partial class FrmConsultaFerramenta : Form
 {
-    public Form2()
+    public FrmConsultaFerramenta()
     {
         InitializeComponent();
     }
