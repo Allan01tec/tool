@@ -117,7 +117,7 @@ namespace Tool
             }
         }
 
-        // Atualizar quantidade de estoque (Entrada/Saída)
+        // Atualizar quantidade de estoque 
         private void btnAtualizarEstoque_Click(object sender, EventArgs e)
         {
             Ferramenta ferramenta = new()
