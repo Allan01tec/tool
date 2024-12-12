@@ -1,0 +1,27 @@
+public partial class FrmEstoque : Form
+{
+    private Tool tool;
+
+    public FrmEstoque(int toolId)
+    {
+        InitializeComponent();
+        LoadTool(toolId);
+    }
+
+    private void LoadTool(int id)
+    {
+        tool = Tool.GetTools().FirstOrDefault(t => t.Id == id);
+        if (tool != null)
+        {
+            lblToolName.Text = tool.Name;
+            txtStockQuantity.Text = tool.StockQuantity.ToString();
+        }
+    }
+
+    private void btnUpdateStock_Click(object sender, EventArgs e)
+    {
+        int quantityChange = Convert.ToInt32(txtStockQuantity.Text);
+        tool.UpdateStock(quantityChange);
+        MessageBox.Show("Estoque atualizado com sucesso!");
+    }
+}
