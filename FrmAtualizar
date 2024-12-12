@@ -1,0 +1,41 @@
+public partial class FrmAtualizar : Form
+{
+    public FrmAtualizar(int toolId)
+    {
+        InitializeComponent();
+        LoadTool(toolId);
+    }
+
+    private void LoadTool(int id)
+    {
+        var tool = Tool.GetTools().FirstOrDefault(t => t.Id == id);
+        if (tool != null)
+        {
+            txtName.Text = tool.Name;
+            txtCategory.Text = tool.Category;
+            txtDescription.Text = tool.Description;
+            txtPower.Text = tool.Power.ToString();
+            txtPrice.Text = tool.Price.ToString();
+            txtStockQuantity.Text = tool.StockQuantity.ToString();
+            cboStatus.SelectedItem = tool.Status;
+        }
+    }
+
+    private void btnUpdate_Click(object sender, EventArgs e)
+    {
+        Tool updatedTool = new Tool
+        {
+            Id = Convert.ToInt32(txtId.Text),
+            Name = txtName.Text,
+            Category = txtCategory.Text,
+            Description = txtDescription.Text,
+            Power = Convert.ToDecimal(txtPower.Text),
+            Price = Convert.ToDecimal(txtPrice.Text),
+            StockQuantity = Convert.ToInt32(txtStockQuantity.Text),
+            Status = cboStatus.SelectedItem.ToString()
+        };
+
+        updatedTool.UpdateTool();
+        MessageBox.Show("Ferramenta atualizada com sucesso!");
+    }
+}
